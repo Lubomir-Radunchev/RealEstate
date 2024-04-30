@@ -1,0 +1,13 @@
+﻿using RealEstateProject.Database.Models;
+using System.Diagnostics.CodeAnalysis;
+
+namespace RealEstateProject.DtosModel
+{
+    public class DealerDto
+    {
+
+        public string PhoneNumber { get; set; }
+        public decimal Devident { get; set; }
+        public string Request { get; set; }
+    }
+}
