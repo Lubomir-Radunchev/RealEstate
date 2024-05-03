@@ -13,5 +13,6 @@ namespace RealEstateProject.Database.Models
         public decimal Devident { get; set; }
         public string IdentityUserId { get; set; }
         public IdentityUser IdentityUser { get; set; }
+        public List<House> Houses = new List<House>();
     }
 }

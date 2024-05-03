@@ -19,5 +19,6 @@ namespace RealEstateProject.Database
         public DbSet<Dealer> Dealers { get; set; }
         public DbSet<House> Houses { get; set; }
         public DbSet<PlaceToRent> PlacesToRent { get; set; }
+        public DbSet<DealerRequest> DealerRequests { get; set; }
     }
 }

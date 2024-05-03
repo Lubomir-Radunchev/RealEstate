@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstateProject.Database;
 
@@ -11,9 +12,11 @@ using RealEstateProject.Database;
 namespace RealEstateProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240430171802_BecomeDealer")]
+    partial class BecomeDealer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -247,7 +250,7 @@ namespace RealEstateProject.Migrations
 
                     b.HasIndex("IdentityUserId");
 
-                    b.ToTable("Dealers", (string)null);
+                    b.ToTable("Dealers");
                 });
 
             modelBuilder.Entity("RealEstateProject.Database.Models.DealerRequest", b =>
@@ -277,7 +280,7 @@ namespace RealEstateProject.Migrations
 
                     b.HasIndex("IdentityUserId");
 
-                    b.ToTable("DealerRequests", (string)null);
+                    b.ToTable("DealerRequests");
                 });
 
             modelBuilder.Entity("RealEstateProject.Database.Models.House", b =>
@@ -317,7 +320,7 @@ namespace RealEstateProject.Migrations
 
                     b.HasIndex("DealerId");
 
-                    b.ToTable("Houses", (string)null);
+                    b.ToTable("Houses");
                 });
 
             modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToBuy", b =>
@@ -338,7 +341,7 @@ namespace RealEstateProject.Migrations
 
                     b.HasIndex("HouseId");
 
-                    b.ToTable("PlacesToBuy", (string)null);
+                    b.ToTable("PlacesToBuy");
                 });
 
             modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToRent", b =>
@@ -362,7 +365,7 @@ namespace RealEstateProject.Migrations
 
                     b.HasIndex("HouseId");
 
-                    b.ToTable("PlacesToRent", (string)null);
+                    b.ToTable("PlacesToRent");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

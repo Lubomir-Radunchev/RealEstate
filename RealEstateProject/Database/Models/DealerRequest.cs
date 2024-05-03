@@ -8,7 +8,9 @@ namespace RealEstateProject.Database.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required,NotNull]
+        [Required, NotNull]
+        public decimal Devident { get; set; }
+        [Required, NotNull]
         public string Request { get; set; }
         [Required, NotNull]
         public string PhoneNumber { get; set; }
