@@ -9,5 +9,7 @@ namespace RealEstateProject.DtosModel.DealerDTO
 
         [Range(0, 20)]
         public decimal Devident { get; set; }
+        [StringLength(100)]
+        public string Name { get; set; }
     }
 }

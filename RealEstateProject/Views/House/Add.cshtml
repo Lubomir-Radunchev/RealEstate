@@ -1,0 +1,41 @@
+﻿@using RealEstateProject.Database.Models
+@model House
+
+@{
+    ViewData["Title"] = "Add House";
+}
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">Become a dealer</h2>
+
+        <form method="post">
+            <div class="form-group">
+                <label asp-for="City"></label>
+                <input asp-for="City" required class="form-control" placeholder="Soifa">
+                <span asp-validation-for="City" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Quadrature"></label>
+                <input asp-for="Quadrature" required class="form-control" placeholder="Quadrature">
+                <span asp-validation-for="Quadrature" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Street"></label>
+                <input asp-for="Street" required class="form-control" placeholder="Kazanska...">
+                <span asp-validation-for="Street" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Condition">Condition</label>
+                <select asp-for="Condition" class="form-control">
+                    @foreach (var condition in Model.Conditions)
+                    {
+                        <option value="@condition">@condition</option>
+                    }
+                </select>
+            </div>
+
+            <input class="btn btn-primary mt-3" type="submit" value="Save" />
+        </form>
+    </div>
+</div>

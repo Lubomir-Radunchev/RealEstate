@@ -20,6 +20,8 @@ namespace RealEstateProject.Database.Models
         public int DealerId { get; set; }
         public Dealer Dealer { get; set; }
         public Condition Condition { get; set; }
+
+        public List<string> Conditions = new List<string>();
     }
     public enum Condition
     {

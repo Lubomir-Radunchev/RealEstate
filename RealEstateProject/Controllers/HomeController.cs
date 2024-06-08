@@ -29,47 +29,5 @@ namespace RealEstateProject.Controllers
         {
             return View();
         }
-        //[HttpGet]
-        //[Authorize]
-        //public IActionResult BecomeDealer()
-        //{
-
-        //    return View();
-        //}
-        //[HttpPost]
-        //public IActionResult BecomeDealer(DealerDto dealerDto)
-        //{
-        //    if (string.IsNullOrEmpty(dealerDto.PhoneNumber) || string.IsNullOrEmpty(dealerDto.Request))
-        //    {
-        //        return View();
-        //    }
-
-        //    DealerRequest dealer = new DealerRequest
-        //    {
-        //        Request = dealerDto.Request,
-        //        PhoneNumber = dealerDto.PhoneNumber,
-        //        Devident = dealerDto.Devident,
-        //        IdentityUserId = this.User.GetId() //това е логнатия User  и го взима по id 
-        //    };
-
-
-        //    this.data.Add(dealer);
-        //    this.data.SaveChanges();
-
-        //    return RedirectToAction("Index","Home");
-        //}
-        [HttpGet]
-        public IActionResult BecomeDealer() 
-        {
-            return View();
-        }
-        //[HttpPost]
-        //public IActionResult BecomeDealer() 
-        //{
-        
-        
-        //}
-
-
     }
 }

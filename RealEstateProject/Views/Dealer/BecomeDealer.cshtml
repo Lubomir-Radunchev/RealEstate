@@ -1,0 +1,36 @@
+﻿@using RealEstateProject.DtosModel.DealerDTO
+@model BecomeDealerDto
+
+@{
+    ViewData["Title"] = "Become a dealer";
+    var errorMessage = TempData["NotValidInputDealer"];
+    TempData["NotValidInputDealer"] = null;
+}
+
+<div class="row">
+    <div class="col-sm-12 offset-lg-2 col-lg-8 offset-xl-3 col-xl-6">
+        <h2 class="heading-margin text-center">Become a dealer</h2>
+        @if (errorMessage != null)
+        {
+            <div class="alert alert-danger">@errorMessage.ToString()</div>
+        }
+        <form class="mt-0" method="post">
+            <div class="form-group">
+                <label asp-for="Name"></label>
+                <input asp-for="Name" required class="form-control" placeholder="Name">
+                <span asp-validation-for="Name" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Devident"></label>
+                <input asp-for="Devident" required class="form-control" placeholder="10%, 20% and etc...">
+                <span asp-validation-for="Devident" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PhoneNumber"></label>
+                <input asp-for="PhoneNumber" required class="form-control" placeholder="+359-888-888-888">
+                <span asp-validation-for="PhoneNumber" class="small text-danger"></span>
+            </div>
+            <input class="btn btn-primary mt-3" type="submit" value="Save" />
+        </form>
+    </div>
+</div>

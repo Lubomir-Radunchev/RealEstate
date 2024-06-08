@@ -34,7 +34,7 @@ namespace RealEstateProject.Controllers
         public IActionResult BecomeDealer(BecomeDealerDto dealerDto)
         {
             // validation
-            if (string.IsNullOrEmpty(dealerDto.PhoneNumber) || dealerDto.Devident > 20 || dealerDto.Devident < 0)
+            if (string.IsNullOrEmpty(dealerDto.PhoneNumber) || dealerDto.Devident > 20 || dealerDto.Devident < 0 || string.IsNullOrEmpty(dealerDto.Name))
             {
                 TempData["NotValidInputDealer"] = "Wrong input! Try again.";
                 return View();
@@ -54,9 +54,9 @@ namespace RealEstateProject.Controllers
 
             this.data.Add(becomeDealerEntity);
             this.data.SaveChanges();
-            
 
-            return View();
+
+          return  RedirectToAction("Index","Home");
         }
     }
 }
