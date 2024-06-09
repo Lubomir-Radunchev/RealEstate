@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using RealEstateProject.Database;
 using Microsoft.AspNetCore.Identity;
+using RealEstateProject.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
-
+builder.Services.AddScoped<IDealerService, DealerService>();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
