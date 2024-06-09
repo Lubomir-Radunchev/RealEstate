@@ -1,24 +1,25 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using RealEstateProject.Database;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RealEstateProject.Database.Models;
 using RealEstateProject.DtosModel.DealerDTO;
 using RealEstateProject.Extentions;
+using RealEstateProject.Services;
 
 namespace RealEstateProject.Controllers
 {
     public class DealerController : BaseController
     {
-        private readonly ApplicationDbContext data;
         private readonly IMapper mapper;
-
-
-
-        public DealerController(ApplicationDbContext data, IMapper mapper)
+        private readonly IDealerService dealerService;
+        // да се напрви сървизи за всички контролери !
+        // и да се инплементират !
+        public DealerController(IMapper mapper, IDealerService dealerService)
         {
             this.mapper = mapper;
-            this.data = data;
+            this.dealerService = dealerService;
         }
+
         public IActionResult Index()
         {
             return View();
@@ -26,6 +27,20 @@ namespace RealEstateProject.Controllers
         [HttpGet]
         public IActionResult BecomeDealer()
         {
+            var userId = User.GetId();
+
+            if (this.dealerService.GetByUserId(userId) != null)
+            {
+                ViewBag.error = "You are already a dealer!";
+                return RedirectToAction("Index", "Home");
+            }
+
+            if (userId == null)
+            {
+                TempData["Error"] = "First you should log in!";
+                return RedirectToAction("Index", "Home");
+            }
+
             BecomeDealerDto dto = new BecomeDealerDto();
 
             return View(dto);
@@ -34,7 +49,7 @@ namespace RealEstateProject.Controllers
         public IActionResult BecomeDealer(BecomeDealerDto dealerDto)
         {
             // validation
-            if (string.IsNullOrEmpty(dealerDto.PhoneNumber) || dealerDto.Devident > 20 || dealerDto.Devident < 0 || string.IsNullOrEmpty(dealerDto.Name))
+            if (string.IsNullOrEmpty(dealerDto.PhoneNumber) || string.IsNullOrEmpty(dealerDto.Name))
             {
                 TempData["NotValidInputDealer"] = "Wrong input! Try again.";
                 return View();
@@ -52,11 +67,11 @@ namespace RealEstateProject.Controllers
             var userId = User.GetId();
             becomeDealerEntity.IdentityUserId = userId;
 
-            this.data.Add(becomeDealerEntity);
-            this.data.SaveChanges();
+            //this.data.Add(becomeDealerEntity);
+            // this.data.SaveChanges();
 
 
-          return  RedirectToAction("Index","Home");
+            return RedirectToAction("Index", "Home");
         }
     }
 }
