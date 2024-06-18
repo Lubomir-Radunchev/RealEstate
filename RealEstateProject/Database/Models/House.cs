@@ -14,7 +14,7 @@ namespace RealEstateProject.Database.Models
         public string City { get; set; }
         [Required, NotNull]
         public int Quadrature { get; set; }
-        public byte[] Picture { get; set; }
+        public string Picture { get; set; }
         [Required, NotNull]
         public string Description { get; set; }
         public int DealerId { get; set; }

@@ -16,15 +16,27 @@
                 <span asp-validation-for="City" class="small text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Quadrature"></label>
-                <input asp-for="Quadrature" required class="form-control" placeholder="Quadrature">
-                <span asp-validation-for="Quadrature" class="small text-danger"></span>
-            </div>
-            <div class="form-group">
                 <label asp-for="Street"></label>
                 <input asp-for="Street" required class="form-control" placeholder="Kazanska...">
                 <span asp-validation-for="Street" class="small text-danger"></span>
             </div>
+            <div class="form-group">
+                <label asp-for="Description"></label>
+                <input asp-for="Description" required class="form-control" placeholder="House Description">
+                <span asp-validation-for="Description" class="small text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Picture"></label>
+                <input asp-for="Picture" required class="form-control" placeholder="House Picture ">
+                <span asp-validation-for="Picture" class="small text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Quadrature"></label>
+                <input asp-for="Quadrature" required class="form-control" placeholder="Quadrature">
+                <span asp-validation-for="Quadrature" class="small text-danger"></span>
+            </div>
+
             <div class="form-group">
                 <label asp-for="Condition">Condition</label>
                 <select asp-for="Condition" class="form-control">
