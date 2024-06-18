@@ -31,7 +31,7 @@ namespace RealEstateProject.Controllers
 
             if (this.dealerService.GetByUserId(userId) != null)
             {
-                ViewBag.error = "You are already a dealer!";
+                TempData["Error"] = "You are already a dealer!";
                 return RedirectToAction("Index", "Home");
             }
 
@@ -55,6 +55,7 @@ namespace RealEstateProject.Controllers
                 return View();
             }
 
+            // състоянието на модела
             if (ModelState.IsValid != true)
             {
                 TempData["NotValidInputDealer"] = "Wrong input! Try again.";
@@ -63,13 +64,15 @@ namespace RealEstateProject.Controllers
 
             // adding 
             // ClaimPrincipalExtention
-            var becomeDealerEntity = mapper.Map<Dealer>(dealerDto);
-            var userId = User.GetId();
-            becomeDealerEntity.IdentityUserId = userId;
-
-            //this.data.Add(becomeDealerEntity);
-            // this.data.SaveChanges();
-
+            try
+            {
+                this.dealerService.Add(dealerDto, this.User.GetId());
+            }
+            catch (Exception e)
+            {
+                TempData["NotValidInputDealer"] = e.Message;
+                return View();
+            }
 
             return RedirectToAction("Index", "Home");
         }

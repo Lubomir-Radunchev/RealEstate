@@ -1,10 +1,10 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RealEstateProject.Database;
 using RealEstateProject.Database.Models;
 using RealEstateProject.DtosModel.HouseDto;
 using RealEstateProject.Extentions;
+using RealEstateProject.Services;
 
 namespace RealEstateProject.Controllers
 {
@@ -13,24 +13,28 @@ namespace RealEstateProject.Controllers
     {
         private readonly ApplicationDbContext data;
         private readonly IMapper mapper;
+        private readonly IDealerService dealerService;
 
 
-
-        public HouseController(ApplicationDbContext data, IMapper mapper)
+        public HouseController(ApplicationDbContext data, IMapper mapper, IDealerService dealerService)
         {
             this.mapper = mapper;
             this.data = data;
+            this.dealerService = dealerService;
         }
+
         [HttpGet]
         public IActionResult Add()
         {
-            var userid = this.User.GetId();
 
-            var dealer = this.data.Dealers.Where(x => x.IdentityUserId == userid).FirstOrDefault();
+            string? userid = this.User.GetId();
+            Dealer? dealer = this.dealerService.GetByUserId(userid);
 
             if (dealer == null)
             {
-                return RedirectToAction("Dealer", "BecomeDealer");            }
+                TempData["Error"] = "First you should become a dealer.";
+                return RedirectToAction("Index", "Home");
+            }
 
             House house = new House();
 
@@ -39,33 +43,35 @@ namespace RealEstateProject.Controllers
                 house.Conditions.Add(cond.ToString());
             }
 
+            house.DealerId = dealer.Id;
+
             return View(house);
 
         }
         [HttpPost]
-        public IActionResult Add(HouseFormDto house, List<IFormFile> Picture)
+        public IActionResult Add(House house)
         {
             var houseEntity = mapper.Map<House>(house);
 
-            byte[] photo = new byte[8000];
-            foreach (var item in Picture)
-            {
-                if (item.Length > 0)
-                {
-                    using (var stream = new MemoryStream())
-                    {
-                        item.CopyToAsync(stream);
-                        photo = stream.ToArray();
-                    }
-                }
-            }
+            //byte[] photo = new byte[8000];
+            //foreach (var item in Picture)
+            //{
+            //    if (item.Length > 0)
+            //    {
+            //        using (var stream = new MemoryStream())
+            //        {
+            //            item.CopyToAsync(stream);
+            //            photo = stream.ToArray();
+            //        }
+            //    }
+            //}
 
-            houseEntity.Picture = photo;
+            //houseEntity.Picture = photo;
 
-            this.data.Houses.Add(houseEntity);
-            this.data.SaveChanges();
+            // this.data.Houses.Add(houseEntity);
+            // this.data.SaveChanges();
 
-            return RedirectToAction("House", "Add");
+            return RedirectToAction("Add", "House");
 
         }
     }
