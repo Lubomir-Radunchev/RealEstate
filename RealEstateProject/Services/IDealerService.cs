@@ -1,4 +1,5 @@
 ﻿using RealEstateProject.Database.Models;
+using RealEstateProject.DtosModel.DealerDTO;
 
 namespace RealEstateProject.Services
 {
@@ -6,5 +7,6 @@ namespace RealEstateProject.Services
     {
         // nullable return 
         Dealer? GetByUserId(string userId);
+        void Add(BecomeDealerDto dealerDto, string userId);
     }
 }
