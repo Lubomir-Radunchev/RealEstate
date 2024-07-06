@@ -11,24 +11,24 @@ namespace RealEstateProject.Controllers
 
     public class HouseController : BaseController
     {
-        private readonly ApplicationDbContext data;
+
         private readonly IMapper mapper;
+        private readonly IHouseService houseService;
         private readonly IDealerService dealerService;
 
 
-        public HouseController(ApplicationDbContext data, IMapper mapper, IDealerService dealerService)
+        public HouseController(IMapper mapper, IHouseService houseService, IDealerService dealerService)
         {
             this.mapper = mapper;
-            this.data = data;
+            this.houseService = houseService;
             this.dealerService = dealerService;
         }
 
         [HttpGet]
         public IActionResult Add()
         {
-
-            string? userid = this.User.GetId();
-            Dealer? dealer = this.dealerService.GetByUserId(userid);
+            var userId = User.GetId();
+            var dealer = this.dealerService.GetByUserId(userId);
 
             if (dealer == null)
             {
@@ -36,40 +36,49 @@ namespace RealEstateProject.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+
             House house = new House();
 
+            foreach (var type in Enum.GetValues(typeof(UseType)))
+            {
+                house.Types.Add(type.ToString());
+            }
             foreach (var cond in Enum.GetValues(typeof(Condition)))
             {
                 house.Conditions.Add(cond.ToString());
             }
 
-            house.DealerId = dealer.Id;
+            //house.DealerId = dealer.Id;
 
             return View(house);
-
         }
+
         [HttpPost]
-        public IActionResult Add(House house)
+        public async Task<IActionResult> Add(House house)
         {
-            var houseEntity = mapper.Map<House>(house);
+            var userId = User.GetId();
+            var dealer = this.dealerService.GetByUserId(userId);
 
-            //byte[] photo = new byte[8000];
-            //foreach (var item in Picture)
-            //{
-            //    if (item.Length > 0)
-            //    {
-            //        using (var stream = new MemoryStream())
-            //        {
-            //            item.CopyToAsync(stream);
-            //            photo = stream.ToArray();
-            //        }
-            //    }
-            //}
+            if (dealer == null)
+            {
+                TempData["Error"] = "First you should become a dealer.";
+                return RedirectToAction("Index", "Home");
+            }
 
-            //houseEntity.Picture = photo;
+            house.DealerId = dealer.Id;
 
-            // this.data.Houses.Add(houseEntity);
-            // this.data.SaveChanges();
+
+            try
+            {
+                await this.houseService.AddAsync(house);
+            }
+            catch (Exception e)
+            {
+
+                TempData["NotValidInputDealer"] = e.Message;
+                return View();
+            }
+
 
             return RedirectToAction("Add", "House");
 
