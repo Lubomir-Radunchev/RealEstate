@@ -12,11 +12,11 @@ namespace RealEstateProject.Controllers
     public class HomeController : BaseController
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext data;
+        
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext data)
+        public HomeController(ILogger<HomeController> logger )
         {
-            this.data=data;
+            
             _logger = logger;
         }
 
