@@ -9,6 +9,7 @@ namespace RealEstateProject.DtosModel.HouseDto
         public string Street { get; set; }
       
         public string City { get; set; }
+
        
         public int Quadrature { get; set; }
         public Condition Condition { get; set; }

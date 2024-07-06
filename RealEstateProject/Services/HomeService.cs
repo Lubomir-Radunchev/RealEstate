@@ -1,8 +1,8 @@
-﻿using RealEstateProject.Database;
+﻿
 
 namespace RealEstateProject.Services
 {
-    public interface HomeService : IHomeService
+    public class HomeService : IHomeService
     {
         
 
