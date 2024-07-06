@@ -15,7 +15,7 @@ namespace RealEstateProject.Database
 
             base.OnModelCreating(builder);
         }
-        public DbSet<PlaceToBuy> PlacesToBuy { get; set; }
+        public DbSet<PlaceToSell> PlacesToSell{ get; set; }
         public DbSet<Dealer> Dealers { get; set; }
         public DbSet<House> Houses { get; set; }
         public DbSet<PlaceToRent> PlacesToRent { get; set; }
