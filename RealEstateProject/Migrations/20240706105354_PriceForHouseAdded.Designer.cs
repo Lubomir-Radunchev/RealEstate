@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstateProject.Database;
 
@@ -11,9 +12,11 @@ using RealEstateProject.Database;
 namespace RealEstateProject.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240706105354_PriceForHouseAdded")]
+    partial class PriceForHouseAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -320,14 +323,32 @@ namespace RealEstateProject.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("UseType")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
                     b.HasIndex("DealerId");
 
                     b.ToTable("Houses");
+                });
+
+            modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToBuy", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("HouseId")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("PricePerQuadrature")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HouseId");
+
+                    b.ToTable("PlacesToBuy");
                 });
 
             modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToRent", b =>
@@ -352,27 +373,6 @@ namespace RealEstateProject.Migrations
                     b.HasIndex("HouseId");
 
                     b.ToTable("PlacesToRent");
-                });
-
-            modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToSell", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("HouseId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("PricePerQuadrature")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HouseId");
-
-                    b.ToTable("PlacesToSell");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -459,7 +459,7 @@ namespace RealEstateProject.Migrations
                     b.Navigation("Dealer");
                 });
 
-            modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToRent", b =>
+            modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToBuy", b =>
                 {
                     b.HasOne("RealEstateProject.Database.Models.House", "House")
                         .WithMany()
@@ -470,7 +470,7 @@ namespace RealEstateProject.Migrations
                     b.Navigation("House");
                 });
 
-            modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToSell", b =>
+            modelBuilder.Entity("RealEstateProject.Database.Models.PlaceToRent", b =>
                 {
                     b.HasOne("RealEstateProject.Database.Models.House", "House")
                         .WithMany()

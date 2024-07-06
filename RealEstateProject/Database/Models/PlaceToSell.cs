@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace RealEstateProject.Database.Models
 {
-    public class PlaceToBuy
+    public class PlaceToSell
     {
         [Key]
         public int Id { get; set; }

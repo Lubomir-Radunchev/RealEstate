@@ -13,6 +13,8 @@ namespace RealEstateProject.Database.Models
         [Required, NotNull]
         public string City { get; set; }
         [Required, NotNull]
+        public decimal Price { get; set; }
+        [Required, NotNull]
         public int Quadrature { get; set; }
         public string Picture { get; set; }
         [Required, NotNull]
@@ -22,9 +24,16 @@ namespace RealEstateProject.Database.Models
         public Condition Condition { get; set; }
 
         public List<string> Conditions = new List<string>();
+        public UseType UseType { get; set; }
+        public List<string> Types = new List<string>();
     }
     public enum Condition
     {
         Good, Bad
     }
+    public enum UseType
+    {
+        ForSell, ForRent, Both
+    }
+
 }
