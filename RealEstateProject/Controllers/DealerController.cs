@@ -40,7 +40,7 @@ namespace RealEstateProject.Controllers
                 TempData["Error"] = "First you should log in!";
                 return RedirectToAction("Index", "Home");
             }
-
+          
             BecomeDealerDto dto = new BecomeDealerDto();
 
             return View(dto);
