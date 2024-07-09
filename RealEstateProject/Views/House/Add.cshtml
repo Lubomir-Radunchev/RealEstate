@@ -1,6 +1,6 @@
 ﻿@using RealEstateProject.Database.Models
-@model House
-
+@using RealEstateProject.DtosModel.HouseDto
+@model HouseFormDto
 @{
     ViewData["Title"] = "Add House";
 }
@@ -36,7 +36,11 @@
                 <input asp-for="Quadrature" required class="form-control" placeholder="Quadrature">
                 <span asp-validation-for="Quadrature" class="small text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label asp-for="Price"></label>
+                <input asp-for="Price" required class="form-control" placeholder="Price for House">
+                <span asp-validation-for="Price" class="small text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Condition">Condition</label>
                 <select asp-for="Condition" class="form-control">
@@ -47,7 +51,38 @@
                 </select>
             </div>
 
+            <div class="form-group">
+                <label asp-for="UseType">UseType</label>
+                <select asp-for="UseType" class="form-control" id="selectedType" onchange="checkUseType()">
+                    @foreach (var type in Model.Types)
+                    {
+                        <option value="@type">@type</option>
+                    }
+                </select>
+            </div>
+
+            <div id="rent-price-input" class="form-group" style="display:none">
+                <label asp-for="RentPrice"></label>
+                <input asp-for="RentPrice" required class="form-control" placeholder="Price for House">
+                <span asp-validation-for="RentPrice" class="small text-danger"></span>
+            </div>
+
             <input class="btn btn-primary mt-3" type="submit" value="Save" />
         </form>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function checkUseType() {
+            var useType = document.getElementById('selectedType').value;
+            var rentInput = document.getElementById('rent-price-input');
+
+            if (useType == 'For_Rent' || useType == 'Both') {
+                rentInput.style.display = 'block'
+            } else {
+                rentInput.style.display = 'none'
+            }
+        }
+    </script>
+} 
