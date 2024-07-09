@@ -13,7 +13,7 @@ namespace RealEstateProject.Services
             this.data = data;
         }
 
-        public async Task AddAsync(House houseDto)
+        public async Task<int> AddAsync(House houseDto)
         {
             if (houseDto == null
     || String.IsNullOrEmpty(houseDto.City)
@@ -30,7 +30,9 @@ namespace RealEstateProject.Services
             await this.data.AddAsync(houseDto);
             await this.data.SaveChangesAsync();
 
-      
+
+            return houseDto.Id;
+
         }
     }
 }

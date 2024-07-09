@@ -5,6 +5,7 @@ namespace RealEstateProject.Services
 {
     public interface IHouseService
     {
-        Task AddAsync(House houseDto);
+        Task<int> AddAsync(House houseDto);
+
     }
 }
