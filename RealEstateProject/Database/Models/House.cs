@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using RealEstateProject.Database.Models.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
@@ -14,6 +15,9 @@ namespace RealEstateProject.Database.Models
         public string City { get; set; }
         [Required, NotNull]
         public decimal Price { get; set; }
+        
+        public decimal? RentPrice { get; set; }
+
         [Required, NotNull]
         public int Quadrature { get; set; }
         public string Picture { get; set; }
@@ -27,13 +31,7 @@ namespace RealEstateProject.Database.Models
         public UseType UseType { get; set; }
         public List<string> Types = new List<string>();
     }
-    public enum Condition
-    {
-        Good, Bad
-    }
-    public enum UseType
-    {
-        ForSell, ForRent, Both
-    }
+   
+   
 
 }
