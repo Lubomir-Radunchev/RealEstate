@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using RealEstateProject.Database;
 using Microsoft.AspNetCore.Identity;
 using RealEstateProject.Services;
+using RealEstateProject.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,7 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true).AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddScoped<IDealerService, DealerService>();
+builder.Services.AddScoped<IDealerService, IDealerService>();
 builder.Services.AddScoped<IHouseService, HouseService>();
 builder.Services.AddScoped<IPlaceForRentService, PlaceForRentService>();
 builder.Services.AddScoped<IPlaceForSellService, PlaceForSellService>();

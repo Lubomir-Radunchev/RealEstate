@@ -14,10 +14,11 @@
         <a class="nav-link text-dark" asp-controller="House" asp-action="Add">Add House</a>
     </li>
     <li class="nav-item">
-        <a class=" nav-link text-dark" asp-controller="Offerts" asp-action="Add">Offerts</a>
+        <a class=" nav-link text-dark" asp-controller="House" asp-action="GetForRent">GetForRent</a>
     </li>
-
-
+    <li class="nav-item">
+        <a class=" nav-link text-dark" asp-controller="House" asp-action="GetForSale">GetForSale</a>
+    </li>
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">

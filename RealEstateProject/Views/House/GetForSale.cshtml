@@ -1,0 +1,29 @@
+﻿@using RealEstateProject.Database.Models
+@using RealEstateProject.DtosModel.HouseDto
+@model List<ForSellFormDto>
+@{
+    ViewData["Title"] = "For Sale ";
+}
+
+<div class="row">
+    @foreach (var house in Model)
+    {
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body text-center">
+                    <img src="@house.House.Picture" alt="House Picture" class="img-fluid" />
+
+                    <h5 class="card-title text-center">@house.House.Street @house.House.Quadrature</h5>
+                   
+                    <a asp-controller="House" asp-action="Edit" asp-route-id="@house.House.Id" class="btn btn-warning">Edit</a>
+
+                    <!-- Form for Delete button -->
+                    <form asp-controller="House" asp-action="Delete" asp-route-id="@house.House.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+</div>
