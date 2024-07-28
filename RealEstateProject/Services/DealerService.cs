@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.VisualBasic;
 using RealEstateProject.Database;
 using RealEstateProject.Database.Models;
 using RealEstateProject.DtosModel.DealerDTO;
+using RealEstateProject.Services.Interfaces;
 
 namespace RealEstateProject.Services
 {
@@ -10,18 +12,19 @@ namespace RealEstateProject.Services
         private readonly ApplicationDbContext data;
         private readonly IMapper mapper;
 
-        public DealerService(ApplicationDbContext data, IMapper mapper)
+        public  DealerService(ApplicationDbContext data, IMapper mapper)
         {
             this.mapper = mapper;
             this.data = data;
         }
 
-        public void Add(BecomeDealerDto dealerDto, string userId)
+        public async Task AddAsync(BecomeDealerDto dealerDto, string userId)
         {
             if (userId == null)
             {
                 throw new ArgumentNullException("User is not found ");
             }
+
 
             if (GetByUserId(userId) != null)
             {
@@ -32,8 +35,9 @@ namespace RealEstateProject.Services
                 throw new ArgumentNullException("Wrong value for devident");
             }
 
-            this.data.Add(dealerDto);
-            this.data.SaveChanges();
+          this.data.AddAsync(dealerDto);
+                  await this.data.SaveChangesAsync();
+
             var becomeDealerEntity = mapper.Map<Dealer>(dealerDto);
             becomeDealerEntity.IdentityUserId = userId;
         }
