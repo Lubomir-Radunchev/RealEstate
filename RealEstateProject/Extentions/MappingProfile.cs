@@ -14,6 +14,10 @@ namespace RealEstateProject.Extentions
             this.CreateMap<HouseFormDto, House>();
            this.CreateMap<BecomeDealerDto,Dealer>();
             this.CreateMap<Dealer, BecomeDealerDto>();
+            this.CreateMap<ForRentFormDto, PlaceToRent>();
+            this.CreateMap<PlaceToRent, ForRentFormDto>();
+            this.CreateMap<PlaceToSell, ForSellFormDto>();
+            this.CreateMap<ForSellFormDto, PlaceToSell>();
             //this.CreateMap<DtoBuy, PlaceToBuy>();
 
             //this.CreateMap<DtoClient, Dealer>();
