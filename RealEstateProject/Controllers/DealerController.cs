@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RealEstateProject.Database.Models;
 using RealEstateProject.DtosModel.DealerDTO;
 using RealEstateProject.Extentions;
-using RealEstateProject.Services;
+using RealEstateProject.Services.Interfaces;
 
 namespace RealEstateProject.Controllers
 {

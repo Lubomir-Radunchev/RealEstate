@@ -5,7 +5,7 @@ using RealEstateProject.Database.Models;
 using RealEstateProject.Database.Models.Enums;
 using RealEstateProject.DtosModel.HouseDto;
 using RealEstateProject.Extentions;
-using RealEstateProject.Services;
+using RealEstateProject.Services.Interfaces;
 
 namespace RealEstateProject.Controllers
 {
@@ -18,15 +18,18 @@ namespace RealEstateProject.Controllers
         private readonly IDealerService dealerService;
         private readonly IPlaceForRentService placeForRent;
         private readonly IPlaceForSellService placeForSell;
+        private readonly ApplicationDbContext data;
 
 
-        public HouseController(IMapper mapper, IHouseService houseService, IDealerService dealerService, IPlaceForRentService placeForRent, IPlaceForSellService placeForSell)
+        public HouseController(IMapper mapper, IHouseService houseService, IDealerService dealerService, IPlaceForRentService placeForRent, IPlaceForSellService placeForSell, ApplicationDbContext data)
         {
             this.mapper = mapper;
+
             this.houseService = houseService;
             this.dealerService = dealerService;
             this.placeForRent = placeForRent;
             this.placeForSell = placeForSell;
+            this.data = data;
         }
 
         [HttpGet]
@@ -41,18 +44,9 @@ namespace RealEstateProject.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
+            var house = new HouseFormDto();
 
-            HouseFormDto house = new HouseFormDto();
-
-            foreach (var type in Enum.GetValues(typeof(UseType)))
-            {
-                house.Types.Add(type.ToString());
-            }
-            foreach (var cond in Enum.GetValues(typeof(Condition)))
-            {
-                house.Conditions.Add(cond.ToString());
-            }
-
+            FillDropdowns(house);
             //house.DealerId = dealer.Id;
 
             return View(house);
@@ -61,7 +55,16 @@ namespace RealEstateProject.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(HouseFormDto houseDto)
         {
-            var userId = User.GetId();
+            string? userId = string.Empty;
+            try
+            {
+                userId = CheckLoggedUser();
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "First you should login first.";
+                return RedirectToAction("Index", "Home");
+            }
             var dealer = this.dealerService.GetByUserId(userId);
 
             if (dealer == null)
@@ -78,14 +81,10 @@ namespace RealEstateProject.Controllers
             {
                 int id = await this.houseService.AddAsync(house);
 
+
                 if (id != 0)
                 {
-
-                    if (houseDto.UseType == UseType.Both)
-                    {
-                        this.placeForRent.Add(house);
-                        this.placeForSell.Add(house);
-                    }
+                    CheckUsetype(houseDto, house);
                 }
             }
             catch (Exception e)
@@ -102,5 +101,94 @@ namespace RealEstateProject.Controllers
             return RedirectToAction("Add", "House");
 
         }
+
+        [HttpGet]
+        public IActionResult All()
+        {
+            List<House> houses = this.data.Houses.ToList();
+
+            return View(houses);
+        }
+
+        [HttpGet]
+        public IActionResult GetForRent()
+        {
+            List<ForRentFormDto> placesToRent = this.placeForRent.GetAll();
+            return View(placesToRent);
+        }
+
+        [HttpGet]
+        public IActionResult GetForSale()
+        {
+            var placesToSell = this.placeForSell.GetAll();
+            return View(placesToSell);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int id)
+        {
+            this.houseService.Delete(id);
+            return RedirectToAction("All");
+        }
+
+        [HttpGet]
+        public IActionResult Edit(int id)
+        {
+            var model = this.data.Houses.FirstOrDefault(x => x.Id == id);
+            var house = mapper.Map<HouseFormDto>(model);
+
+            FillDropdowns(house);
+
+            return View(house);
+        }
+
+        [HttpPost]
+        public IActionResult Edit(HouseFormDto houseDto)
+        {
+            this.houseService.EditAsync(houseDto);
+
+            return RedirectToAction("All");
+        }
+
+        private static void FillDropdowns(HouseFormDto house)
+        {
+            foreach (var type in Enum.GetValues(typeof(UseType)))
+            {
+                house.Types.Add(type.ToString());
+            }
+            foreach (var cond in Enum.GetValues(typeof(Condition)))
+            {
+                house.Conditions.Add(cond.ToString());
+            }
+        }
+
+        private void CheckUsetype(HouseFormDto houseDto, House house)
+        {
+            if (houseDto.UseType == UseType.Both)
+            {
+                this.placeForRent.Add(house);
+                this.placeForSell.Add(house);
+            }
+            if (houseDto.UseType == UseType.For_Sell)
+            {
+                this.placeForSell.Add(house);
+            }
+            if (houseDto.UseType == UseType.For_Rent)
+            {
+                this.placeForRent.Add(house);
+            }
+        }
+
+        private string? CheckLoggedUser()
+        {
+            var userId = User.GetId();
+            if (userId == null)
+            {
+                throw new Exception();
+            }
+
+            return userId;
+        }
+
     }
 }
