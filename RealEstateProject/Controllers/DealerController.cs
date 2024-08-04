@@ -25,11 +25,11 @@ namespace RealEstateProject.Controllers
             return View();
         }
         [HttpGet]
-        public IActionResult BecomeDealer()
+        public async Task<IActionResult> BecomeDealer()
         {
             var userId = User.GetId();
 
-            if (this.dealerService.GetByUserIdAsync(userId) != null)
+            if (await this.dealerService.GetByUserIdAsync(userId) != null)
             {
                 TempData["Error"] = "You are already a dealer!";
                 return RedirectToAction("Index", "Home");
@@ -40,13 +40,13 @@ namespace RealEstateProject.Controllers
                 TempData["Error"] = "First you should log in!";
                 return RedirectToAction("Index", "Home");
             }
-          
+
             BecomeDealerDto dto = new BecomeDealerDto();
 
             return View(dto);
         }
         [HttpPost]
-        public async Task <IActionResult> BecomeDealer(BecomeDealerDto dealerDto)
+        public async Task<IActionResult> BecomeDealer(BecomeDealerDto dealerDto)
         {
             // validation
             if (string.IsNullOrEmpty(dealerDto.PhoneNumber) || string.IsNullOrEmpty(dealerDto.Name))
@@ -66,7 +66,7 @@ namespace RealEstateProject.Controllers
             // ClaimPrincipalExtention
             try
             {
-             await this.dealerService.AddAsync(dealerDto, this.User.GetId());
+                await this.dealerService.AddAsync(dealerDto, this.User.GetId());
             }
             catch (Exception e)
             {
