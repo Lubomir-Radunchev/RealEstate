@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Microsoft.VisualBasic;
+using Microsoft.EntityFrameworkCore;
 using RealEstateProject.Database;
 using RealEstateProject.Database.Models;
 using RealEstateProject.DtosModel.DealerDTO;
@@ -12,7 +12,7 @@ namespace RealEstateProject.Services
         private readonly ApplicationDbContext data;
         private readonly IMapper mapper;
 
-        public  DealerService(ApplicationDbContext data, IMapper mapper)
+        public DealerService(ApplicationDbContext data, IMapper mapper)
         {
             this.mapper = mapper;
             this.data = data;
@@ -26,7 +26,7 @@ namespace RealEstateProject.Services
             }
 
 
-            if (GetByUserId(userId) != null)
+            if (GetByUserIdAsync(userId) != null)
             {
                 throw new ArgumentNullException("User is not found ");
             }
@@ -35,14 +35,14 @@ namespace RealEstateProject.Services
                 throw new ArgumentNullException("Wrong value for devident");
             }
 
-          this.data.AddAsync(dealerDto);
-                  await this.data.SaveChangesAsync();
+            await this.data.AddAsync(dealerDto);
+            await this.data.SaveChangesAsync();
 
             var becomeDealerEntity = mapper.Map<Dealer>(dealerDto);
             becomeDealerEntity.IdentityUserId = userId;
         }
 
-        public Dealer? GetByUserId(string userId)
-          => this.data.Dealers.FirstOrDefault(x => x.IdentityUserId == userId);
+        public async Task<Dealer?> GetByUserIdAsync(string userId)
+          => await this.data.Dealers.FirstOrDefaultAsync(x => x.IdentityUserId == userId);
     }
 }

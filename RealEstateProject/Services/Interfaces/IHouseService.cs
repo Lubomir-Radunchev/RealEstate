@@ -10,6 +10,7 @@ namespace RealEstateProject.Services.Interfaces
         Task EditAsync(HouseFormDto houseDto);
         Task<int> AddAsync(House houseDto);
         Task<House?> GetByIdAsync(int id); // nullable
+        Task<List<HouseFormDto>> GetAllAsync();
 
     }
 }

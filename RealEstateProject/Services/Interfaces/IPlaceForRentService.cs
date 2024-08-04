@@ -6,6 +6,6 @@ namespace RealEstateProject.Services.Interfaces
     public interface IPlaceForRentService
     {
         Task AddAsync(House house);
-        List<ForRentFormDto> GetAll();
+        Task<List<ForRentFormDto>> GetAllAsync();
     }
 }

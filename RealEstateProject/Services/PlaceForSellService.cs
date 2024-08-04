@@ -22,8 +22,8 @@ namespace RealEstateProject.Services
         {
             var placeToSell = new PlaceToSell() { HouseId = house.Id, PricePerQuadrature = house.Price / house.Quadrature };
 
-            this.data.Add(placeToSell);
-            await this.data.SaveChangesAsync();
+            await this.data.AddAsync(placeToSell);
+            this.data.SaveChanges();
         }
 
         public List<ForSellFormDto> GetAll()

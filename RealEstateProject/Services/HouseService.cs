@@ -1,4 +1,7 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using RealEstateProject.Database;
 using RealEstateProject.Database.Models;
 using RealEstateProject.DtosModel.HouseDto;
@@ -6,11 +9,11 @@ using RealEstateProject.Services.Interfaces;
 
 namespace RealEstateProject.Services
 {
-    public class HouseService(ApplicationDbContext data, IMapper mapper, DealerService dealerService) : IHouseService
+    public class HouseService(ApplicationDbContext data, IMapper mapper, IDealerService dealerService) : IHouseService
     {
         private readonly IMapper mapper = mapper;
         private readonly ApplicationDbContext data = data;
-        private readonly DealerService _dealerService = dealerService;
+        private readonly IDealerService dealerService = dealerService;
 
         public async Task<int> AddAsync(House houseDto)
         {
@@ -53,14 +56,14 @@ namespace RealEstateProject.Services
             await this.data.SaveChangesAsync();
         }
 
-        public async Task<House?> GetByIdAsync(int id) => await this.data.Houses.FindAsync(id);
+        public async Task<House?> GetByIdAsync(int id) => await this.data.Houses.FirstOrDefaultAsync(x=>x.Id == id);
 
         public async Task DeleteAsync(int id, string userId)
         {
             //var UserId = this.data.Dealer.Id;
 
-            var dealer = this._dealerService.GetByUserId(userId);
-            var house = await GetByIdAsync(id);
+            var dealer =await this.dealerService.GetByUserIdAsync(userId);
+           var house = await GetByIdAsync(id);
 
             if (dealer == null) { }
 
@@ -72,5 +75,12 @@ namespace RealEstateProject.Services
         }
 
         public int GetDealerIdByHouseId(int id) => this.data.Houses.Where(x => x.Id == id).Select(d => d.DealerId).FirstOrDefault();
+        public async Task<List<HouseFormDto>> GetAllAsync()
+        {
+            List<House> allHouses = await data.Houses.ToListAsync();
+
+
+            return this.mapper.Map<List<HouseFormDto>>(allHouses);
+        }
     }
 }
