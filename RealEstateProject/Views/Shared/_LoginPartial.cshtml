@@ -7,18 +7,22 @@
 
 
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="Dealer" asp-action="BecomeDealer">Become Dealer</a>
+        <a class="nav-link text-dark"asp-area="" asp-controller="Dealer" asp-action="BecomeDealer">Become Dealer</a>
     </li>
 
     <li class="nav-item">
-        <a class="nav-link text-dark" asp-controller="House" asp-action="Add">Add House</a>
+        <a class="nav-link text-dark" asp-area="" asp-controller="House" asp-action="Add">Add House</a>
     </li>
     <li class="nav-item">
-        <a class=" nav-link text-dark" asp-controller="House" asp-action="GetForRent">GetForRent</a>
+        <a class=" nav-link text-dark" asp-area="" asp-controller="House" asp-action="GetForRent">GetForRent</a>
     </li>
     <li class="nav-item">
-        <a class=" nav-link text-dark" asp-controller="House" asp-action="GetForSale">GetForSale</a>
+        <a class=" nav-link text-dark" asp-area="" asp-controller="House" asp-action="GetForSale">GetForSale</a>
     </li>
+    <li class="nav-item">
+        <a class=" nav-link text-dark" asp-area="" asp-controller="House" asp-action="All">AllHouses</a>
+    </li>
+
     @if (SignInManager.IsSignedIn(User))
     {
         <li class="nav-item">
