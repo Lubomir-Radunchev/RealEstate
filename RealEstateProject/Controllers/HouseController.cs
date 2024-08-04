@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+
 using RealEstateProject.Database;
 using RealEstateProject.Database.Models;
 using RealEstateProject.Database.Models.Enums;
@@ -33,10 +34,10 @@ namespace RealEstateProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult Add()
+        public async Task<IActionResult> AddAsync()
         {
             var userId = User.GetId();
-            var dealer = this.dealerService.GetByUserId(userId);
+            var dealer = await this.dealerService.GetByUserIdAsync(userId);
 
             if (dealer == null)
             {
@@ -65,13 +66,14 @@ namespace RealEstateProject.Controllers
                 TempData["Error"] = "First you should login first.";
                 return RedirectToAction("Index", "Home");
             }
-            var dealer = this.dealerService.GetByUserId(userId);
+            var dealer = await this.dealerService.GetByUserIdAsync(userId);
 
             if (dealer == null)
             {
                 TempData["Error"] = "First you should become a dealer.";
                 return RedirectToAction("Index", "Home");
             }
+
 
             houseDto.DealerId = dealer.Id;
 
@@ -103,17 +105,17 @@ namespace RealEstateProject.Controllers
         }
 
         [HttpGet]
-        public IActionResult All()
+        public async Task<IActionResult> AllAsync()
         {
-            List<House> houses = this.data.Houses.ToList();
+            List<HouseFormDto> houses = await this.houseService.GetAllAsync();
 
             return View(houses);
         }
 
         [HttpGet]
-        public IActionResult GetForRent()
+        public async Task<IActionResult> GetForRent()
         {
-            List<ForRentFormDto> placesToRent = this.placeForRent.GetAll();
+            List<ForRentFormDto> placesToRent = await this.placeForRent.GetAllAsync();
             return View(placesToRent);
         }
 
@@ -125,16 +127,18 @@ namespace RealEstateProject.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            this.houseService.Delete(id);
+            var userId = User.GetId();
+            await this.houseService.DeleteAsync(id, userId);
             return RedirectToAction("All");
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public async Task<IActionResult> EditAsync(int id)
         {
-            var model = this.data.Houses.FirstOrDefault(x => x.Id == id);
+            // ??????????????? // var model = this.data.Houses.FirstOrDefault(x => x.Id == id);
+            var model = await this.houseService.GetByIdAsync(id);
             var house = mapper.Map<HouseFormDto>(model);
 
             FillDropdowns(house);
@@ -143,9 +147,9 @@ namespace RealEstateProject.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(HouseFormDto houseDto)
+        public async Task<IActionResult> EditAsync(HouseFormDto houseDto)
         {
-            this.houseService.EditAsync(houseDto);
+            await this.houseService.EditAsync(houseDto);
 
             return RedirectToAction("All");
         }
@@ -162,20 +166,20 @@ namespace RealEstateProject.Controllers
             }
         }
 
-        private void CheckUsetype(HouseFormDto houseDto, House house)
+        private async void CheckUsetype(HouseFormDto houseDto, House house)
         {
             if (houseDto.UseType == UseType.Both)
             {
-                this.placeForRent.Add(house);
-                this.placeForSell.Add(house);
+                await this.placeForRent.AddAsync(house);
+                await this.placeForSell.AddAsync(house);
             }
             if (houseDto.UseType == UseType.For_Sell)
             {
-                this.placeForSell.Add(house);
+                await this.placeForSell.AddAsync(house);
             }
             if (houseDto.UseType == UseType.For_Rent)
             {
-                this.placeForRent.Add(house);
+                await this.placeForRent.AddAsync(house);
             }
         }
 
